@@ -1,9 +1,6 @@
 -#  This file is app/views/movies/index.html.haml
 %h2 All Movies
 -# edit movie title and release date into clickable links
--# http://haml.info/tutorial.html
--# https://stackoverflow.com/questions/23908507/conditional-class-in-haml/23908682
--# https://apidock.com/rails/ActionView/Helpers/FormTagHelper/form_tag
 -# part3: reworked the check_box_tag call since it didn't work for session
 = form_tag movies_path, :method => :get, :id => "ratings_form" do
   Include:

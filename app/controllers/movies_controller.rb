@@ -14,7 +14,7 @@ class MoviesController < ApplicationController
     @movie = Movie.find(id) # look up movie by unique ID
     # will render app/views/movies/show.<extension> by default
   end
-  # For part 3: need to redesign code outline
+  # For part 3: need to redesign code outline -- done
   def index
     ##-------DEFINE-------##
     @all_ratings = Movie.get_ratings()
@@ -34,7 +34,7 @@ class MoviesController < ApplicationController
     ##-------SORT SELECTION-------##
     if params[:sort] #get from selection
       @sort = params[:sort]
-      session[:sort] = @sort
+      session[:sort] = @sort #store it in cookies
     else
       @sort = session[:sort] #existing cookies
     end
