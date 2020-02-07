@@ -16,15 +16,19 @@ class MoviesController < ApplicationController
     @all_ratings = ['G','PG','PG-13','R'] # to support checkboxes
     @filtered_movies = params[:ratings]
     # create hash to store filtered ratings and populate it based on 
-    # selected filters, 
-    @checked_boxes = {} 
+    # selected filters
+    @checked_boxes = Hash.new()
+    @all_ratings.each do |rating|
+      @checked_boxes[rating] = true
+    end
+    #check if the check_box hash has a rating from all ratings, if not set 'check' sign to false to not display check
     if params.has_key?(:ratings)
       @all_ratings.each do |rating|
-        if params[:ratings].keys.include?(rating)
-          @checked_boxes[rating] = true
+        if !@filtered_movies.key?(rating)
+          @checked_boxes[rating] = false
         end
       end
-      @movies = Movie.where(rating: params[:ratings].keys) #return filtered movies
+      @movies = Movie.where(rating: @filtered_movies.keys) #return filtered movies
     else
       #@movies = Movie.all
       @movies = Movie.order(params[:sort])

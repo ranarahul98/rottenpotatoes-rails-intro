@@ -8,7 +8,7 @@
   Include:
   - @all_ratings.each do |rating|
     = rating
-    = check_box_tag "ratings[#{rating}]", 1, @checked_boxes[rating] # array of selected ratings
+    = check_box_tag "ratings[#{rating}]", 'yes', @checked_boxes[rating] # array of selected ratings
   = submit_tag 'Refresh', :id => "ratings_submit"
 
 %table#movies.table.table-striped.col-md-12
