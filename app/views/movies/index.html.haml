@@ -2,7 +2,15 @@
 %h2 All Movies
 -# edit movie title and release date into clickable links
 -# http://haml.info/tutorial.html
--# https://stackoverflow.com/questions/23908507/conditional-class-in-haml/23908682 
+-# https://stackoverflow.com/questions/23908507/conditional-class-in-haml/23908682
+-# https://apidock.com/rails/ActionView/Helpers/FormTagHelper/form_tag
+= form_tag movies_path, :method => :get, :id => "ratings_form" do
+  Include:
+  - @all_ratings.each do |rating|
+    = rating
+    = check_box_tag "ratings[#{rating}]", 1, @checked_boxes[rating] # array of selected ratings
+  = submit_tag 'Refresh', :id => "ratings_submit"
+
 %table#movies.table.table-striped.col-md-12
   %thead
     %tr

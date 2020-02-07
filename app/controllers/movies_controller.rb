@@ -12,7 +12,23 @@ class MoviesController < ApplicationController
 
   def index
     @sort = params[:sort] # need to define sort here to use in view
-    @movies = Movie.order(params[:sort])
+    #@movies = Movie.order(params[:sort])
+    @all_ratings = ['G','PG','PG-13','R'] # to support checkboxes
+    @filtered_movies = params[:ratings]
+    # create hash to store filtered ratings and populate it based on 
+    # selected filters, 
+    @checked_boxes = {} 
+    if params.has_key?(:ratings)
+      @all_ratings.each do |rating|
+        if params[:ratings].keys.include?(rating)
+          @checked_boxes[rating] = true
+        end
+      end
+      @movies = Movie.where(rating: params[:ratings].keys) #return filtered movies
+    else
+      #@movies = Movie.all
+      @movies = Movie.order(params[:sort])
+    end
   end
 
   def new
