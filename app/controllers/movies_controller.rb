@@ -1,4 +1,9 @@
 class MoviesController < ApplicationController
+ #Help received: Piazza and Stackoverflow articles about Ruby/Rails
+ -# http://haml.info/tutorial.html
+ -# https://stackoverflow.com/questions/23908507/conditional-class-in-haml/23908682
+ -# https://apidock.com/rails/ActionView/Helpers/FormTagHelper/form_tag
+ -# https://guides.rubyonrails.org/action_controller_overview.html#session
 
   def movie_params
     params.require(:movie).permit(:title, :rating, :description, :release_date)
@@ -9,30 +14,40 @@ class MoviesController < ApplicationController
     @movie = Movie.find(id) # look up movie by unique ID
     # will render app/views/movies/show.<extension> by default
   end
-
+  # For part 3: need to redesign code outline
   def index
-    @sort = params[:sort] # need to define sort here to use in view
-    #@movies = Movie.order(params[:sort])
-    @all_ratings = ['G','PG','PG-13','R'] # to support checkboxes
-    @filtered_movies = params[:ratings]
-    # create hash to store filtered ratings and populate it based on 
-    # selected filters
-    @checked_boxes = Hash.new()
-    @all_ratings.each do |rating|
-      @checked_boxes[rating] = true
+    ##-------DEFINE-------##
+    @all_ratings = Movie.get_ratings()
+    @movies = Movie.all
+    redirect = false
+    @filtered_movies = @all_ratings
+
+    ##-------FILTER RATINGS-------##
+    if params[:ratings] #get from selection
+      @filtered_movies = params[:ratings].keys
+      session[:ratings] = params[:ratings] # store it in cookies
+    elsif session[:ratings] #existing cookies
+      redirect = true
+      @filtered_movies = session[:ratings].keys
     end
-    #check if the check_box hash has a rating from all ratings, if not set 'check' sign to false to not display check
-    if params.has_key?(:ratings)
-      @all_ratings.each do |rating|
-        if !@filtered_movies.key?(rating)
-          @checked_boxes[rating] = false
-        end
-      end
-      @movies = Movie.where(rating: @filtered_movies.keys) #return filtered movies
+
+    ##-------SORT SELECTION-------##
+    if params[:sort] #get from selection
+      @sort = params[:sort]
+      session[:sort] = @sort
     else
-      #@movies = Movie.all
-      @movies = Movie.order(params[:sort])
+      @sort = session[:sort] #existing cookies
     end
+   
+    ##-------@SORT?-------##
+    #executed depending on if title or release_date clicked
+    @sort ? @movies = Movie.where(:rating => @filtered_movies).order(@sort) : @movies = Movie.where(:rating => @filtered_movies)
+
+    ##-------TO BE RESTFUL-------##
+    if redirect
+      redirect_to movies_path(:sort => session[:sort], :ratings => session[:ratings])
+    end
+
   end
 
   def new
