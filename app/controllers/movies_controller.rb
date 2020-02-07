@@ -1,9 +1,9 @@
 class MoviesController < ApplicationController
  #Help received: Piazza and Stackoverflow articles about Ruby/Rails
- -# http://haml.info/tutorial.html
- -# https://stackoverflow.com/questions/23908507/conditional-class-in-haml/23908682
- -# https://apidock.com/rails/ActionView/Helpers/FormTagHelper/form_tag
- -# https://guides.rubyonrails.org/action_controller_overview.html#session
+ # http://haml.info/tutorial.html
+ # https://stackoverflow.com/questions/23908507/conditional-class-in-haml/23908682
+ # https://apidock.com/rails/ActionView/Helpers/FormTagHelper/form_tag
+ # https://guides.rubyonrails.org/action_controller_overview.html#session
 
   def movie_params
     params.require(:movie).permit(:title, :rating, :description, :release_date)
@@ -39,7 +39,7 @@ class MoviesController < ApplicationController
       @sort = session[:sort] #existing cookies
     end
    
-    ##-------@SORT?-------##
+    ##-------SORT?-------##
     #executed depending on if title or release_date clicked
     @sort ? @movies = Movie.where(:rating => @filtered_movies).order(@sort) : @movies = Movie.where(:rating => @filtered_movies)
 
